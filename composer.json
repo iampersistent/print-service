@@ -1,0 +1,15 @@
+{
+    "name": "iampersistent/print-service",
+    "description": "send files to be printed",
+    "keywords": ["print", "google cloud print"],
+    "license": "MIT",
+    "require": {
+        "php": ">=5.4",
+        "vespolina/media": "*"
+    },
+    "autoload":{
+        "psr-0":{
+            "PrintService": "lib/"
+        }
+    }
+}
