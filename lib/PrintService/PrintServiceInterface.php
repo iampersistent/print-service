@@ -2,16 +2,10 @@
 
 namespace PrintService;
 
-interface PrintServiceInterface 
-{
-    /**
-     * Submit a file to be printed
-     *
-     * @param FileInterface $file
-     * @return PrintJob
-     */
-    public function submitJob(FileInterface $file);
+use Vespolina\Media\FileInterface;
 
+interface PrintServiceInterface
+{
     /**
      * Discover the available printers
      *
@@ -26,4 +20,12 @@ interface PrintServiceInterface
      * @return array
      */
     public function queryPrinter(Printer $printer);
+
+    /**
+     * Submit a file to be printed
+     *
+     * @param FileInterface $file
+     * @return PrintJob
+     */
+    public function submitPrintJob(FileInterface $file);
 } 
