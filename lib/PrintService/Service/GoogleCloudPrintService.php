@@ -7,13 +7,14 @@ use GuzzleHttp\Post\PostFile;
 use PrintService\Exception\ConnectionException;
 use PrintService\Job;
 use PrintService\Printer;
+use PrintService\PrintServiceInterface;
 use Vespolina\Media\FileInterface;
 
 /**
  * Class GoogleCloudPrintService
  * @package Fruit\MatterBundle\Service
  */
-class GoogleCloudPrintService
+class GoogleCloudPrintService implements PrintServiceInterface
 {
     protected $accessToken;
     protected $client;
