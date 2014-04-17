@@ -18,16 +18,23 @@ class GoogleCloudPrintService implements PrintServiceInterface
 {
     protected $accessToken;
     protected $client;
+    protected $googleClient;
+
+    public function __construct(\Google_Client $googleClient)
+    {
+        $this->googleClient = $googleClient;
+    }
 
     /**
-     * Set the accessToken
+     * Pass the authentication code in for a token
      *
-     * @param mixed $accessToken
+     * @param string $code
      * @return $this
      */
-    public function setAccessToken($accessToken)
+    public function authenticate($code)
     {
-        $this->accessToken = $accessToken;
+        $response = json_decode($this->googleClient->authenticate($code), true);
+        $this->accessToken = $response['access_token'];
 
         return $this;
     }
@@ -35,7 +42,7 @@ class GoogleCloudPrintService implements PrintServiceInterface
     /**
      * Return the accessToken
      *
-     * @return mixed
+     * @return string
      */
     public function getAccessToken()
     {
@@ -81,9 +88,7 @@ class GoogleCloudPrintService implements PrintServiceInterface
      */
     public function submitPrintJob(Printer $printer, FileInterface $file)
     {
-        $ticket = '{ "version": "1.0", "print": {} }';
         $title = 'file-'.$file->getId();
-
         $parameters = [
             'printerid' => $printer->getVendorId(),
             'title' => $title,
