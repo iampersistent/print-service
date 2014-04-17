@@ -24,8 +24,9 @@ interface PrintServiceInterface
     /**
      * Submit a file to be printed
      *
+     * @param Printer $printer
      * @param FileInterface $file
      * @return PrintJob
      */
-    public function submitPrintJob(FileInterface $file);
+    public function submitPrintJob(Printer $printer, FileInterface $file);
 } 
