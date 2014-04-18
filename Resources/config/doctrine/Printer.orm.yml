@@ -1,0 +1,17 @@
+PrintService\Printer:
+    type: entity
+    table: print_service_printer
+    id:
+        id:
+           type: integer
+           generator:
+               strategy: AUTO
+    fields:
+        description:
+            type: string
+        metadata:
+            type: array
+        name:
+            type: string
+        vendorId:
+            type: string

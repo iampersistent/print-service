@@ -9,9 +9,20 @@ namespace PrintService;
 class Printer 
 {
     protected $description;
+    protected $id;
     protected $metadata;
     protected $name;
     protected $vendorId;
+
+    /**
+     * Return the id
+     *
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * Set the description
