@@ -16,7 +16,7 @@ use Vespolina\Media\FileInterface;
  */
 class GoogleCloudPrintService implements PrintServiceInterface
 {
-    protected $accessToken;
+    protected $refreshToken;
     protected $client;
     protected $googleClient;
 
@@ -26,27 +26,26 @@ class GoogleCloudPrintService implements PrintServiceInterface
     }
 
     /**
-     * Pass the authentication code in for a token
+     * Set the refresh token
      *
-     * @param string $code
+     * @param string $refreshToken
      * @return $this
      */
-    public function authenticate($code)
+    public function setRefreshToken($refreshToken)
     {
-        $response = json_decode($this->googleClient->authenticate($code), true);
-        $this->accessToken = $response['access_token'];
+        $this->refreshToken = $refreshToken;
 
         return $this;
     }
 
     /**
-     * Return the accessToken
+     * Return the refresh token
      *
      * @return string
      */
-    public function getAccessToken()
+    public function getRefreshTokens()
     {
-        return $this->accessToken;
+        return $this->refreshToken;
     }
 
     /**
@@ -93,7 +92,7 @@ class GoogleCloudPrintService implements PrintServiceInterface
             'printerid' => $printer->getVendorId(),
             'title' => $title,
             'ticket' => '{ "version": "1.0", "print": {} }',
-            'content' => new PostFile('content', fopen($file->getFileSystemPath(), 'r')),
+            'content' => new PostFile('content', fopen($file->getLocalPath(), 'r')),
         ];
         $response = $this->postRequest('submit', $parameters);
         $setAt =new \DateTime();
@@ -123,11 +122,19 @@ class GoogleCloudPrintService implements PrintServiceInterface
         return $this->client;
     }
 
+    protected function getToken()
+    {
+        $this->googleClient->refreshToken($this->refreshToken);
+        $tokens = json_decode($this->googleClient->getAccessToken(), true);
+
+        return $tokens['access_token'];
+    }
+
     protected function postRequest($path, array $parameters = [])
     {
         $url = 'https://www.google.com/cloudprint/' . $path;
         $options = [
-            'headers' => ['Authorization' => 'OAuth '.$this->accessToken],
+            'headers' => ['Authorization' => 'OAuth '.$this->getToken()],
             'body' => $parameters,
         ];
         $response = $this->getClient()->post($url, $options);
