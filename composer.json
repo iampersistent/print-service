@@ -4,12 +4,15 @@
     "keywords": ["print", "google cloud print"],
     "license": "MIT",
     "require": {
-        "guzzlehttp/guzzle": "~4.0",
+        "guzzlehttp/guzzle": "~5.0",
         "php": ">=5.4",
         "vespolina/media": "dev-master"
     },
     "suggest": {
         "google/apiclient": "currently needed for GoogleCloudPrintService"
+    },
+    "require-dev": {
+        "google/apiclient": "~1.1"
     },
     "autoload":{
         "psr-0":{

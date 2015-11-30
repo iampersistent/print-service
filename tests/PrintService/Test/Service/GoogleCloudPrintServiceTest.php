@@ -31,7 +31,9 @@ class GoogleCloudPrintServiceTest extends \PHPUnit_Framework_TestCase
             ->method('post')
             ->will($this->returnValue($response));
 
-        $service = $this->getMock('PrintService\Service\GoogleCloudPrintService', ['getClient']);
+        $googleClient = $this->getMock('Google_Client');
+
+        $service = $this->getMock('PrintService\Service\GoogleCloudPrintService', ['getClient'], [$googleClient]);
         $service->expects($this->once())
             ->method('getClient')
             ->will($this->returnValue($client));
@@ -41,7 +43,9 @@ class GoogleCloudPrintServiceTest extends \PHPUnit_Framework_TestCase
 
     public function testDiscoverPrinters()
     {
-        $service = $this->getMock('PrintService\Service\GoogleCloudPrintService', ['postRequest']);
+        $googleClient = $this->getMock('Google_Client');
+
+        $service = $this->getMock('PrintService\Service\GoogleCloudPrintService', ['postRequest'], [$googleClient]);
         $service->expects($this->once())
             ->method('postRequest')
             ->with('search', [])
@@ -67,7 +71,8 @@ class GoogleCloudPrintServiceTest extends \PHPUnit_Framework_TestCase
             'printerid' => '9c11268c-4dd8-c8f4-e63e-3a5f26f0fc8f',
             'extra_fields' => 'connectionStatus',
         ];
-        $service = $this->getMock('PrintService\Service\GoogleCloudPrintService', ['postRequest']);
+        $googleClient = $this->getMock('Google_Client');
+        $service = $this->getMock('PrintService\Service\GoogleCloudPrintService', ['postRequest'], [$googleClient]);
         $service->expects($this->once())
             ->method('postRequest')
             ->with('printer', $parameters)
@@ -78,7 +83,8 @@ class GoogleCloudPrintServiceTest extends \PHPUnit_Framework_TestCase
 
     public function testSubmitJob()
     {
-        $service = $this->getMock('PrintService\Service\GoogleCloudPrintService', ['postRequest']);
+        $googleClient = $this->getMock('Google_Client');
+        $service = $this->getMock('PrintService\Service\GoogleCloudPrintService', ['postRequest'], [$googleClient]);
         $service->expects($this->once())
             ->method('postRequest')
             ->will($this->returnValue($this->printJobData));
@@ -87,7 +93,7 @@ class GoogleCloudPrintServiceTest extends \PHPUnit_Framework_TestCase
         $printer->setVendorId('9c11268c-4dd8-c8f4-e63e-3a5f26f0fc8f');
         $exampleFile = realpath(__DIR__ . '/../fixtures/example.pdf');
         $file = new File();
-        $file->setFilesystemPath($exampleFile);
+        $file->setLocalPath($exampleFile);
         $rp = new \ReflectionProperty($file, 'id');
         $rp->setAccessible(true);
         $rp->setValue($file, 853);
